@@ -1,30 +1,32 @@
 import React, { useEffect,useState } from 'react';
-function App() {
-  const [days, setDays] = useState();
-  const [hours, setHours] = useState();
-  const [minutes, setMinutes] = useState();
-  const [seconds, setSeconds] = useState();
+// import { PropTypes } from 'react';
+function App( { date }) {
+  const [days, setDays] = useState(1);
+  const [hours, setHours] = useState(1);
+  const [minutes, setMinutes] = useState(1);
+  const [seconds, setSeconds] = useState(1);
 
-  const birthday = new Date("Dec 08,2022 16:57:00").getTime();
+  const birthday = new Date(date.replace(/\s/, 'T')).getTime();
   const present = new Date().getTime();
   const [difference,setDifference] = useState(birthday - present);
-
-  const addYear = () => {
-    setDifference(birthday - present);
-    setDays(Math.floor(difference / (1000 * 60 * 60 * 24)));
-    setHours(Math.floor((difference / (1000 * 60 * 60)) % 24));
-    setMinutes(Math.floor((difference / 1000 / 60) % 60));
-    setSeconds(Math.floor((difference / 1000) % 60));
-    console.log(difference);
-  }
-
   useEffect (() => {
-    const interval = setInterval(addYear, 1000);
-    // console.log(seconds);
+    const interval = setInterval(
+      () => {
+        setDifference(birthday - present);
+        
+        if ( days <= 0 && hours <= 0 && minutes <= 0 && seconds <= 0) {
+          setDifference(0);
+        }
+        setDays(Math.floor(difference / (1000 * 60 * 60 * 24)));
+        setHours(Math.floor((difference / (1000 * 60 * 60)) % 24));
+        setMinutes(Math.floor((difference / 1000 / 60) % 60));
+        setSeconds(Math.floor((difference / 1000) % 60));
+      }, 1000);
     return () => {
       clearInterval(interval);
     }
-  }, [difference])
+  }, [birthday, days, difference, hours, minutes, present, seconds])
+  
   return (
     <div className="container">
       <div className="timer-container">
@@ -56,5 +58,7 @@ function App() {
     </div>
   );
 }
-
+// App.PropTypes = {
+//   date: PropTypes.stri
+// }
 export default App;
