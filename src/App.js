@@ -1,14 +1,16 @@
 import React, { useEffect,useState } from 'react';
-// import { PropTypes } from 'react';
-function App( { date }) {
-  const [days, setDays] = useState(1);
-  const [hours, setHours] = useState(1);
-  const [minutes, setMinutes] = useState(1);
-  const [seconds, setSeconds] = useState(1);
 
-  const birthday = new Date(date.replace(/\s/, 'T')).getTime();
+function App({ date }) {
+
+  const birthday = new Date(date.toString('YYYY-MM-dd')).getTime();
   const present = new Date().getTime();
+
   const [difference,setDifference] = useState(birthday - present);
+  const [days, setDays] = useState(Math.floor(difference / (1000 * 60 * 60 * 24)));
+  const [hours, setHours] = useState(Math.floor((difference / (1000 * 60 * 60)) % 24));
+  const [minutes, setMinutes] = useState(Math.floor((difference / 1000 / 60) % 60));
+  const [seconds, setSeconds] = useState(Math.floor((difference / 1000) % 60));
+  console.log(present);
   useEffect (() => {
     const interval = setInterval(
       () => {
