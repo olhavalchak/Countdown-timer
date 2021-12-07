@@ -4,42 +4,33 @@ import PropTypes from 'prop-types';
 function App({ date }) {
 
   const birthday = new Date(date.toString('YYYY-MM-dd')).getTime();
-
-  const difference = birthday - new Date().getTime();
-  const [timeLeft, setTimeLeft]  = useState({
-    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((difference / 1000 / 60) % 60),
-    seconds: Math.floor((difference / 1000) % 60),
-  });
-  const present = new Date().getTime();
+  
+  const calculateTime = () => { 
+      const present = new Date().getTime();
+      const diff = birthday - present;
+      if ( diff <= 0) {
+        return {
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        }
+      } else {
+          return {
+            days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+            minutes: Math.floor((diff / 1000 / 60) % 60),
+            seconds: Math.floor((diff / 1000) % 60),
+          };
+        }
+    }
+  const [timeLeft, setTimeLeft]  = useState(calculateTime());
 
   useEffect (() => {
-    const interval = setInterval(
-      () => {
-        const diff = birthday - present;
-  
-        if ( timeLeft.days <= 0 && timeLeft.hours <= 0 && timeLeft.minutes <= 0 && timeLeft.seconds <= 0) {
-          console.log('end');
-          setTimeLeft({
-            days: 0,
-            hours: 0,
-            minutes: 0,
-            seconds: 0,
-          })
-        } else {
-            setTimeLeft({
-              days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-              hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-              minutes: Math.floor((diff / 1000 / 60) % 60),
-              seconds: Math.floor((diff / 1000) % 60),
-            });
-          }
-      }, 1000);
+    const interval = setInterval(() => setTimeLeft(calculateTime()), 1000);
 
     return () => clearInterval(interval);
-
-  }, [timeLeft, birthday, present])
+  }, [])
   
   return (
     <div className="container">
