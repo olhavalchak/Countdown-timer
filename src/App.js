@@ -3,26 +3,27 @@ import React, { useEffect,useState } from 'react';
 function App({ date }) {
 
   const birthday = new Date(date.toString('YYYY-MM-dd')).getTime();
-  const present = new Date().getTime();
 
-  const [difference,setDifference] = useState(birthday - present);
+  const [difference,setDifference] = useState(birthday - new Date().getTime());
   const [days, setDays] = useState(Math.floor(difference / (1000 * 60 * 60 * 24)));
   const [hours, setHours] = useState(Math.floor((difference / (1000 * 60 * 60)) % 24));
   const [minutes, setMinutes] = useState(Math.floor((difference / 1000 / 60) % 60));
   const [seconds, setSeconds] = useState(Math.floor((difference / 1000) % 60));
-  console.log(present);
+  const present = new Date().getTime();
+
   useEffect (() => {
     const interval = setInterval(
       () => {
-        setDifference(birthday - present);
-        
+        const diff = birthday - present;
+        setDifference(diff);
+        console.log(birthday, present);
         if ( days <= 0 && hours <= 0 && minutes <= 0 && seconds <= 0) {
           setDifference(0);
         }
-        setDays(Math.floor(difference / (1000 * 60 * 60 * 24)));
-        setHours(Math.floor((difference / (1000 * 60 * 60)) % 24));
-        setMinutes(Math.floor((difference / 1000 / 60) % 60));
-        setSeconds(Math.floor((difference / 1000) % 60));
+        setDays(Math.floor(diff / (1000 * 60 * 60 * 24)));
+        setHours(Math.floor((diff / (1000 * 60 * 60)) % 24));
+        setMinutes(Math.floor((diff / 1000 / 60) % 60));
+        setSeconds(Math.floor((diff / 1000) % 60));
       }, 1000);
     return () => {
       clearInterval(interval);
@@ -60,7 +61,5 @@ function App({ date }) {
     </div>
   );
 }
-// App.PropTypes = {
-//   date: PropTypes.stri
-// }
+
 export default App;

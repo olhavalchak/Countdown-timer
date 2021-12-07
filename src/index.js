@@ -5,7 +5,7 @@ import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App date = '2021-12-07T10:59:00'/>
+    <App date = '2022-12-08T10:59:00'/>
   </React.StrictMode>,
   document.getElementById('root')
 );
